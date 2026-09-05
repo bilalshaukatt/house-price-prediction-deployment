@@ -1,51 +1,108 @@
-
 # House Price Category Predictor
 
-A Streamlit web application that predicts whether a house is likely to be
-**Expensive** or **Affordable** (relative to the dataset median), based on
-key property features. Built on the Ames Housing dataset as the final
-deployment task for the Auspify Technologies Python internship.
+A Streamlit web application that predicts whether a house is likely to be **Expensive** or **Affordable** relative to the dataset median, based on key property features.
+
+Built using the Ames Housing dataset as the final deployment task for the **Auspify Technologies Machine Learning/Python internship**.
+
+---
 
 ## Project Overview
 
-- **Type**: Binary classification web app
-- **Model**: Random Forest Classifier (scikit-learn), wrapped in a full
-  preprocessing + prediction pipeline
-- **Target**: `PriceCategory` — 1 if `SalePrice` is above the dataset
-  median ($163,000), else 0
-- **Test accuracy**: ~90.75%
+* **Type:** Binary classification web application
+* **Model:** Random Forest Classifier using scikit-learn
+* **Framework:** Streamlit
+* **Target:** `PriceCategory`
+
+  * `1` = Expensive
+  * `0` = Affordable
+* **Dataset median:** $163,000
+* **Test accuracy:** ~90.75%
+
+The application includes a complete preprocessing and prediction pipeline so that user inputs are processed consistently before being passed to the trained model.
+
+---
 
 ## Dataset Description
 
-- Source: Ames Housing dataset (`Week_3_FINAL_CLEANED.csv`), 1,458 rows,
-  81 original columns
-- For usability, the web form exposes a compact set of the most
-  influential features rather than all 80:
-  - **Numeric**: OverallQual, GrLivArea, GarageCars, TotalBsmtSF,
-    FullBath, YearBuilt, YearRemodAdd, LotArea, Fireplaces
-  - **Categorical**: Neighborhood, HouseStyle, ExterQual, KitchenQual
-- Note: several categorical columns (e.g. `Alley`, `PoolQC`) use the
-  literal string `"None"` to mean "does not have this feature." The
-  training script reads the CSV with `keep_default_na=False` so these
-  aren't mistaken for missing data.
+The project uses the Ames Housing dataset:
+
+* **Dataset:** `Week_3_FINAL_CLEANED.csv`
+* **Records:** 1,458
+* **Original columns:** 81
+* **Features used by the web form:** 13
+
+### Numeric Features
+
+* OverallQual
+* GrLivArea
+* GarageCars
+* TotalBsmtSF
+* FullBath
+* YearBuilt
+* YearRemodAdd
+* LotArea
+* Fireplaces
+
+### Categorical Features
+
+* Neighborhood
+* HouseStyle
+* ExterQual
+* KitchenQual
+
+Several categorical values such as `Alley` and `PoolQC` use `"None"` to represent the absence of a feature.
+
+---
 
 ## Model Description
 
-- **Pipeline**: `ColumnTransformer` (median imputation + scaling for
-  numeric features; most-frequent imputation + one-hot encoding for
-  categorical features) → `RandomForestClassifier`
-  (`n_estimators=200`, `max_depth=10`, `min_samples_split=5`)
-- The entire pipeline (preprocessing + model) is saved as a single
-  `.pkl` file with `joblib`, so the app never has to guess at
-  preprocessing steps at inference time.
-- Metadata (feature lists, valid categorical options, numeric ranges,
-  median price, test accuracy) is saved separately in
-  `model_metadata.pkl` and used to build the form dynamically.
+The application uses a Random Forest classification pipeline:
+
+```text
+User Input
+    ↓
+Data Pre-processing
+    ↓
+Imputation + Scaling + One-Hot Encoding
+    ↓
+Random Forest Classifier
+    ↓
+Prediction + Confidence Score
+    ↓
+Result Display
+```
+
+### Model Configuration
+
+* **Algorithm:** Random Forest Classifier
+* **n_estimators:** 200
+* **max_depth:** 10
+* **min_samples_split:** 5
+* **Random state:** 42
+
+The preprocessing and model are saved together in:
+
+```text
+house_price_model.pkl
+```
+
+Additional model information is stored in:
+
+```text
+model_metadata.pkl
+```
+
+The metadata contains information such as feature lists, valid categorical options, numeric ranges, median price, and model performance.
+
+---
 
 ## Requirements
 
-See `requirements.txt`:
-```
+The required Python packages are listed in `requirements.txt`.
+
+Main dependencies include:
+
+```text
 streamlit>=1.30
 scikit-learn>=1.6
 pandas
@@ -54,90 +111,214 @@ numpy
 plotly>=5.18
 ```
 
-## Installation Instructions
+---
+
+## Installation
+
+Clone the repository:
 
 ```bash
-git clone <your-repo-url>
-cd <repo-folder>
+git clone https://github.com/bilalshaukatt/house-price-prediction-deployment.git
+```
+
+Move into the project directory:
+
+```bash
+cd house-price-prediction-deployment
+```
+
+Install the dependencies:
+
+```bash
 pip install -r requirements.txt
 ```
 
-## Interface
+---
 
-The app has three tabs:
-- **🔮 Predict** — the input form, a live prediction result banner, and a
-  Plotly confidence gauge
-- **📊 Model Insights** — an interactive feature-importance chart showing
-  what drives the model's decisions
-- **📜 History** — a log of every prediction made this session, quick
-  stats, a confidence trend line chart, and CSV export
+## Running the Application Locally
 
-It uses a custom gradient theme, card-style layout, and a dark mode toggle
-(sidebar).
+Start the Streamlit application:
 
-Run locally:
 ```bash
 streamlit run app.py
 ```
-Then open the URL shown in the terminal (typically `http://localhost:8501`).
 
-**In the app:**
-1. Fill in the property details in the form (quality, size, neighborhood, etc.)
-2. Click **Predict**
-3. View the predicted category (Expensive / Affordable) and the model's
-   confidence score
-4. Click **Reset** to clear the form and start a new prediction
-5. Every prediction is logged in the **Prediction History** table below
-   the form, which can be downloaded as a CSV
+The application will normally be available at:
+
+```text
+http://localhost:8501
+```
+
+---
+
+## Application Interface
+
+The application contains three main sections:
+
+### 🔮 Predict
+
+Users enter property information such as:
+
+* Overall quality
+* Living area
+* Garage capacity
+* Basement area
+* Neighborhood
+* House style
+* Kitchen quality
+* Exterior quality
+* Year built
+* And other property characteristics
+
+After clicking **Predict**, the application displays:
+
+* Predicted category
+* Confidence score
+* Visual confidence indicator
+
+### 📊 Model Insights
+
+The application provides an interactive feature-importance visualization showing which features have the greatest influence on the Random Forest model.
+
+### 📜 Prediction History
+
+The application keeps track of predictions made during the current session.
+
+Users can:
+
+* View previous predictions
+* Review confidence scores
+* View confidence trends
+* Export prediction history as CSV
+
+---
+
+## Application Screenshots
+
+### Main Prediction Interface
+
+### Prediction Result
+
+### Prediction History
+
+---
+
+## Using the Application
+
+1. Open the application.
+2. Enter the required property information.
+3. Click **Predict**.
+4. View the predicted category:
+
+   * **Expensive**
+   * **Affordable**
+5. Review the model confidence score.
+6. Use **Reset** to start another prediction.
+7. Review previous predictions in the **History** section.
+8. Export prediction history as a CSV file if required.
+
+---
 
 ## Deployment
 
-### Streamlit Community Cloud (recommended)
-1. Push this folder to a public GitHub repository (must include
-   `app.py`, `house_price_model.pkl`, `model_metadata.pkl`,
-   `requirements.txt`)
-2. Go to [share.streamlit.io](https://share.streamlit.io), sign in with
-   GitHub
-3. Click **New app**, select your repo/branch, set the main file path
-   to `app.py`
-4. Click **Deploy** — you'll get a public URL like
-   `https://<your-app>.streamlit.app`
+The application is deployed using **Railway** with Docker.
 
-### Alternative: Render / Railway
-Both platforms can run this as a web service using:
-```
-streamlit run app.py --server.port $PORT --server.address 0.0.0.0
-```
+### Live Application
 
-## Deployment URL
-_Add your live Streamlit Community Cloud URL here after deploying._
+https://house-price-prediction-deployment-production.up.railway.app
 
-## GitHub Repository
-_Add your repository link here after pushing the code._
+### GitHub Repository
 
-## Screenshots
-_Add screenshots of the running app here (form, prediction result, and
-prediction history) — see PROJECT_REPORT.md for exact instructions._
+https://github.com/bilalshaukatt/house-price-prediction-deployment
+
+---
 
 ## Bonus Features Implemented
-- ✅ Prediction history table (session-based)
-- ✅ Download predictions as CSV
-- ✅ Dark mode toggle (sidebar)
-- ✅ Interactive charts — feature importance (expander) and confidence
-  trend across predictions (line chart)
-- ✅ Docker containerization (`Dockerfile`, `.dockerignore`)
-- ✅ GitHub Actions CI/CD (`.github/workflows/ci.yml`) — installs deps,
-  compiles code, retrains the model, runs a prediction smoke test, and
-  builds the Docker image on every push/PR
-- ✅ Confidence score with progress bar
-- ✅ Sidebar with project info, metrics, and instructions
-- ✅ Input validation with clear error messages
+
+* ✅ Prediction history
+* ✅ CSV export
+* ✅ Dark mode toggle
+* ✅ Interactive feature-importance chart
+* ✅ Confidence trend chart
+* ✅ Confidence score with progress indicator
+* ✅ Sidebar with project information and instructions
+* ✅ Input validation
+* ✅ Error handling
+* ✅ Docker containerization
+* ✅ GitHub Actions CI/CD
+* ✅ Automated model retraining in CI
+* ✅ Prediction smoke test
+* ✅ Docker image build validation
+
+---
 
 ## Running with Docker
+
+Build the Docker image:
+
 ```bash
 docker build -t house-price-predictor .
+```
+
+Run the container:
+
+```bash
 docker run -p 8501:8501 house-price-predictor
 ```
-Then open `http://localhost:8501`.
 
+Then open:
 
+```text
+http://localhost:8501
+```
+
+---
+
+## Project Structure
+
+```text
+house-price-prediction-deployment/
+│
+├── .github/
+│   └── workflows/
+│       └── ci.yml
+│
+├── screenshots/
+│   ├── Home.png
+│   ├── prediction.png
+│   └── History.png
+│
+├── app.py
+├── train_model.py
+├── house_price_model.pkl
+├── model_metadata.pkl
+├── requirements.txt
+├── Dockerfile
+├── .dockerignore
+├── PROJECT_REPORT.md
+└── README.md
+```
+
+---
+
+## Project Status
+
+| Deliverable             | Status     |
+| ----------------------- | ---------- |
+| Source Code             | ✅ Complete |
+| Trained Model           | ✅ Complete |
+| Web Application         | ✅ Complete |
+| Live Deployment         | ✅ Complete |
+| README                  | ✅ Complete |
+| Project Report          | ✅ Complete |
+| GitHub Repository       | ✅ Complete |
+| Application Screenshots | ✅ Complete |
+
+---
+
+## Author
+
+**Bilal Shaukat**
+
+Computer Science Student
+Machine Learning Intern
