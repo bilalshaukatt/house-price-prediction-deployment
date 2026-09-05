@@ -197,9 +197,15 @@ Users can:
 
 ### Main Prediction Interface
 
+![Home Screen](screenshots/Home.png)
+
 ### Prediction Result
 
+![Prediction Result](screenshots/prediction.png)
+
 ### Prediction History
+
+![Prediction History](screenshots/History.png)
 
 ---
 
