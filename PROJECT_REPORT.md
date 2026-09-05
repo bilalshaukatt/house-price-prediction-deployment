@@ -2,8 +2,7 @@
 
 ## 1. Objective
 Deploy a trained machine learning model as an interactive web application
-that accepts user input and returns predictions, satisfying the Auspify
-Technologies internship's final deliverable.
+that accepts user input and returns predictions.
 
 ## 2. Workflow Summary
 ```
@@ -85,22 +84,34 @@ trained.
   smoke test, and builds the Docker image
 
 ## 8. How to Reproduce
+
 1. `pip install -r requirements.txt`
-2. `python train_model.py` (regenerates `house_price_model.pkl` and
-   `model_metadata.pkl` from the CSV)
+2. `python train_model.py` (regenerates `house_price_model.pkl` and `model_metadata.pkl` from the CSV)
 3. `streamlit run app.py`
 
-## 9. Taking Screenshots for Submission
-Once running locally (`streamlit run app.py`):
-1. Take a screenshot of the empty form (project overview)
-2. Fill in sample values, click **Predict**, screenshot the result +
-   confidence score
-3. Make a couple of predictions, screenshot the **Prediction History**
-   table
-4. Save these into a `screenshots/` folder and reference them in
-   `README.md`
+### Deployment
 
-## 10. Deploying with Docker
+The application is deployed using Railway with Docker.
+
+**Live Application:** https://house-price-prediction-deployment-production.up.railway.app
+
+**GitHub Repository:** https://github.com/bilalshaukatt/house-price-prediction-deployment
+
+
+## 9. Application Screenshots
+
+Screenshots were captured from the deployed web application to demonstrate the user interface and core functionality.
+
+1. `screenshots/Home.png` — Main prediction form and project interface.
+2. `screenshots/prediction.png` — Prediction result with confidence score.
+3. `screenshots/History.png` — Prediction history table showing previous predictions.
+
+These screenshots are included in the project repository and can also be referenced in the README.
+`
+
+### Railway Deployment
+
+The Dockerized application is deployed on Railway and is publicly accessible through the live application URL listed in Section 8.
 ```bash
 docker build -t house-price-predictor .
 docker run -p 8501:8501 house-price-predictor
@@ -108,11 +119,13 @@ docker run -p 8501:8501 house-price-predictor
 This is also validated automatically by the CI pipeline on every push.
 
 ## 11. Deliverables Checklist
+
 - [x] Complete source code (`app.py`, `train_model.py`)
 - [x] Trained model (`house_price_model.pkl`, `model_metadata.pkl`)
 - [x] Working web application (Streamlit)
-- [ ] Live deployment URL (deploy via Streamlit Community Cloud — see README)
+- [x] Live deployment URL (Railway)
 - [x] README.md
 - [x] Project report (this document)
-- [ ] GitHub repository (push this folder to GitHub)
-- [ ] Application screenshots (capture after running locally — see Section 9)
+- [x] GitHub repository
+- [x] Application screenshots
+
